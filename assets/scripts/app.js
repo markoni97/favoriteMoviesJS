@@ -8,12 +8,21 @@ const userInputs = addMovieModal.querySelectorAll('input');
 const startAddMovieButton = document.querySelector('header button');
 const cancleAddMovieButton = addMovieModal.querySelector('.btn--passive');
 const confirmAddMovieButton = cancleAddMovieButton.nextElementSibling;
+const movieSection = document.getElementById('entry-text');
 
 const moviesList = [];
 
 const clearUserInputs = () => {
     for(const userInput of userInputs){
         userInput.value = '';
+    }
+};
+
+const updateUI = () => {
+    if(moviesList.length === 0){
+        movieSection.style.display = 'block';
+    } else {
+        movieSection.style.display = 'none';
     }
 };
 
@@ -25,6 +34,22 @@ const toggleMovieModal = () => {
 const cancleAddMovieHandler = () => {
     toggleMovieModal();
     clearUserInputs();
+};
+
+const renderNewMovieElement = (title, imageUrl, rating) => {
+    const newMovieElement = document.createElement('li');
+    newMovieElement.className = 'movie-element';
+    newMovieElement.innerHTML = `
+        <div class="movie-element__image">
+            <img src="${imageUrl}" alt="${title}"
+        </div>
+        <div>
+            <h2>${title}</h2>
+            <p>${rating}/5 stars</p>
+        </div>
+    `;
+    const rootList = document.getElementById('movie-list');
+    rootList.append(newMovieElement);
 };
 
 const confirmAddMovieHandler = () => {
@@ -48,6 +73,8 @@ const confirmAddMovieHandler = () => {
 
         moviesList.push(newMovie);
         clearUserInputs();
+        updateUI();
+        renderNewMovieElement(newMovie.title, newMovie.image, newMovie.rating);
         console.log(moviesList);
     }
 };
